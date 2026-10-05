@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+import javafx.geometry.Insets?>
+import javafx.scene.control.*?>
+import javafx.scene.layout.*?>
+
+<VBox spacing="15" alignment="CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.expense.controller.ExpenseDialogController" styleClass="dialog-vbox">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    
+    <Label text="Harcama Detayları" styleClass="title-label"/>
+
+    <GridPane hgap="10" vgap="15">
+        <Label text="Tarih:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="input-field"/>
+
+        <Label text="Kategori:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <ComboBox fx:id="categoryComboBox" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="input-field" promptText="Seçiniz"/>
+
+        <Label text="Açıklama:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="descriptionField" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="input-field"/>
+
+        <Label text="Tutar:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <HBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <TextField fx:id="amountField" styleClass="input-field" prefWidth="120"/>
+            <ComboBox fx:id="currencyComboBox" prefWidth="80" styleClass="input-field"/>
+        </HBox>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+        <Button text="İptal" onAction="#close" styleClass="secondary-button"/>
+        <Button text="Kaydet" onAction="#save" styleClass="primary-button"/>
+    </HBox>
+</VBox>

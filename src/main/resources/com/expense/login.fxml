@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+import javafx.geometry.Insets?>
+import javafx.scene.control.Button?>
+import javafx.scene.control.Label?>
+import javafx.scene.control.PasswordField?>
+import javafx.scene.control.TextField?>
+import javafx.scene.layout.VBox?>
+import javafx.scene.layout.HBox?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.expense.controller.LoginController" styleClass="main-vbox">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Label text="Kişisel Harcama Takip Uygulaması" styleClass="title-label"/>
+
+    <VBox spacing="10.0" maxWidth="300" alignment="CENTER">
+        <TextField fx:id="usernameField" promptText="Kullanıcı Adı" styleClass="input-field"/>
+        <PasswordField fx:id="passwordField" promptText="Şifre" styleClass="input-field"/>
+        
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Giriş Yap" onAction="#login" styleClass="primary-button"/>
+            <Button text="Kayıt Ol" onAction="#register" styleClass="secondary-button"/>
+        </HBox>
+    </VBox>
+</VBox>
