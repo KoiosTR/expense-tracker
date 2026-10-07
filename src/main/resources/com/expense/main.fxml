@@ -1,49 +1,194 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-import javafx.geometry.Insets?>
-import javafx.scene.control.*?>
-import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.chart.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.expense.controller.MainController" styleClass="main-pane">
-    <top>
-        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="top-bar">
-            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
-            <Label text="Harcamalarım" styleClass="header-label"/>
-            <Region HBox.hgrow="ALWAYS" />
-            <Button text="Kategorileri Yönet" onAction="#manageCategories" styleClass="action-button"/>
-            <Button text="Çıkış Yap" onAction="#logout" styleClass="danger-button"/>
-        </HBox>
-    </top>
+<HBox fx:id="rootLayout" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.expense.controller.MainController" styleClass="root-layout">
     
-    <center>
-        <VBox spacing="10">
-            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
-            
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Button text="Yeni Harcama Ekle" onAction="#openAddExpense" styleClass="primary-button"/>
-                <Button text="Düzenle" onAction="#openEditExpense" styleClass="secondary-button"/>
-                <Button text="Sil" onAction="#deleteExpense" styleClass="danger-button"/>
-                <Region HBox.hgrow="ALWAYS" />
-                <Button text="CSV'ye Aktar" onAction="#exportToCsv" styleClass="action-button"/>
-            </HBox>
-
-            <TableView fx:id="expenseTable" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="dateCol" text="Tarih" prefWidth="100"/>
-                    <TableColumn fx:id="categoryCol" text="Kategori" prefWidth="150"/>
-                    <TableColumn fx:id="descriptionCol" text="Açıklama" prefWidth="250"/>
-                    <TableColumn fx:id="amountCol" text="Tutar" prefWidth="100"/>
-                    <TableColumn fx:id="currencyCol" text="Para Birimi" prefWidth="80"/>
-                    <TableColumn fx:id="amountTlCol" text="Tutar (TL)" prefWidth="100"/>
-                </columns>
-            </TableView>
+    <!-- LEFT SIDEBAR -->
+    <VBox prefWidth="240" styleClass="sidebar">
+        <!-- Logo Area -->
+        <HBox alignment="CENTER" spacing="10" styleClass="sidebar-logo-area">
+            <Label text="✨" style="-fx-font-size: 24px;"/>
+            <Label text="Zealz" styleClass="sidebar-logo-text"/>
+        </HBox>
+        
+        <!-- Profile Area -->
+        <VBox alignment="CENTER" spacing="10" styleClass="sidebar-profile-area">
+            <Circle fx:id="profileCircle" radius="35" styleClass="profile-circle" fill="#dce9ff" />
+            <Label fx:id="profileNameLabel" text="Hoş Geldiniz!" styleClass="profile-name"/>
         </VBox>
-    </center>
-    
-    <bottom>
-        <HBox alignment="CENTER_RIGHT" styleClass="bottom-bar">
-            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
-            <Label fx:id="totalLabel" text="Toplam Harcama (TL): 0.00" styleClass="total-label"/>
-        </HBox>
-    </bottom>
-</BorderPane>
+        
+        <!-- Navigation Menu -->
+        <VBox spacing="10" VBox.vgrow="ALWAYS" styleClass="sidebar-menu">
+            <Button fx:id="btnDashboard" text=" Dashboard" onAction="#showDashboard" styleClass="menu-button, active-menu-button" maxWidth="Infinity" alignment="BASELINE_LEFT">
+                <graphic><FontIcon iconLiteral="fas-chart-pie" iconSize="16" styleClass="menu-icon"/></graphic>
+            </Button>
+            <Button fx:id="btnTransactions" text=" İşlemler" onAction="#showTransactions" styleClass="menu-button" maxWidth="Infinity" alignment="BASELINE_LEFT">
+                <graphic><FontIcon iconLiteral="fas-credit-card" iconSize="16" styleClass="menu-icon"/></graphic>
+            </Button>
+            <Button fx:id="btnWallet" text=" Cüzdan" onAction="#showWallet" styleClass="menu-button" maxWidth="Infinity" alignment="BASELINE_LEFT">
+                <graphic><FontIcon iconLiteral="fas-wallet" iconSize="16" styleClass="menu-icon"/></graphic>
+            </Button>
+        </VBox>
+        
+        <!-- Bottom Action -->
+        <VBox spacing="5" style="-fx-padding: 0 0 10 0;">
+            <Button text=" CSV'ye Aktar" onAction="#exportToCsv" styleClass="menu-button" maxWidth="Infinity" alignment="BASELINE_LEFT">
+                <graphic><FontIcon iconLiteral="fas-file-export" iconSize="16" styleClass="menu-icon"/></graphic>
+            </Button>
+            <Button text=" Ayarlar" onAction="#openSettings" styleClass="menu-button" maxWidth="Infinity" alignment="BASELINE_LEFT">
+                <graphic><FontIcon iconLiteral="fas-cog" iconSize="16" styleClass="menu-icon"/></graphic>
+            </Button>
+            <Button text=" Çıkış Yap" onAction="#logout" styleClass="menu-button, logout-button" maxWidth="Infinity" alignment="BASELINE_LEFT">
+                <graphic><FontIcon iconLiteral="fas-sign-out-alt" iconSize="16" styleClass="menu-icon"/></graphic>
+            </Button>
+        </VBox>
+    </VBox>
+
+    <!-- MAIN CONTENT AREA -->
+    <StackPane HBox.hgrow="ALWAYS" style="-fx-background-color: #f8f9fc;">
+        <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
+        
+        <!-- PAGE 3: WALLET -->
+        <VBox fx:id="walletPage" spacing="30" visible="false" managed="false" style="-fx-background-color: #ffffff; -fx-background-radius: 20px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 20, 0, 0, 10);">
+            <padding><Insets top="40" right="50" bottom="40" left="50"/></padding>
+            <Label text="Cüzdan Ayarları" styleClass="welcome-header"/>
+            
+            <VBox spacing="20" maxWidth="400">
+                <Label text="Aylık bütçenizi ve gelirinizi buradan güncelleyerek harcama raporlarınızı daha sağlıklı analiz edebilirsiniz." wrapText="true" style="-fx-text-fill: #6b7280; -fx-font-size: 14px;"/>
+                
+                <VBox spacing="10">
+                    <Label text="Aylık Gelir (₺)" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                    <TextField fx:id="incomeField" styleClass="input-field" promptText="Örn: 50000" />
+                </VBox>
+                
+                <VBox spacing="10">
+                    <Label text="Aylık Bütçe Limiti (₺)" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                    <TextField fx:id="budgetField" styleClass="input-field" promptText="Örn: 35000" />
+                </VBox>
+                
+                <Button text="Kaydet" onAction="#saveWalletSettings" styleClass="action-button-primary" prefWidth="150" style="-fx-margin-top: 10px;"/>
+            </VBox>
+        </VBox>
+        
+        <!-- PAGE 1: DASHBOARD -->
+        <VBox fx:id="dashboardPage" spacing="30" style="-fx-background-color: #ffffff; -fx-background-radius: 20px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 20, 0, 0, 10);">
+            <padding><Insets top="40" right="50" bottom="40" left="50"/></padding>
+            <Label fx:id="welcomeLabel" text="Welcome back!" styleClass="welcome-header"/>
+
+            <HBox spacing="50" VBox.vgrow="ALWAYS">
+                <!-- LEFT COLUMN -->
+                <VBox spacing="35" prefWidth="380" maxWidth="380">
+                    <!-- Balance Card -->
+                    <VBox styleClass="balance-card-silver" prefHeight="200" spacing="15">
+                        <Label text="Mevcut Bakiye" styleClass="balance-subtitle"/>
+                        <Label fx:id="totalLabel" text="₺ 0.00" styleClass="balance-amount-dark"/>
+                        <Region VBox.vgrow="ALWAYS" />
+                        <HBox alignment="CENTER_LEFT" spacing="15">
+                            <Label text="**** 3922" styleClass="balance-card-number"/>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <HBox>
+                                <Circle radius="12" fill="#ff3b30" style="-fx-opacity: 0.9;"/>
+                                <Circle radius="12" fill="#ffcc00" style="-fx-opacity: 0.9; -fx-translate-x: -10;"/>
+                            </HBox>
+                        </HBox>
+                    </VBox>
+                    
+                    <!-- Budget Section -->
+                    <VBox spacing="10">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="Aylık Gelir" styleClass="budget-subtitle"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="lblMonthlyIncome" text="₺ 0.00" styleClass="budget-value-purple"/>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 10 0 0 0;">
+                            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                <Label text="Aylık Bütçe Limiti" styleClass="budget-subtitle"/>
+                                <Label fx:id="lblMonthlyBudget" text="₺ 0.00" styleClass="budget-value-green"/>
+                            </VBox>
+                            <VBox spacing="5" HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT">
+                                <Label text="Harcanan" styleClass="budget-subtitle"/>
+                                <Label fx:id="lblSpent" text="₺ 0.00" styleClass="budget-value-red"/>
+                            </VBox>
+                        </HBox>
+                        <!-- Progress Bar -->
+                        <HBox style="-fx-padding: 10 0 0 0;">
+                            <Region fx:id="progressSpent" prefHeight="6" prefWidth="0" style="-fx-background-color: -color-primary; -fx-background-radius: 3 0 0 3;"/>
+                            <Region fx:id="progressRemaining" prefHeight="6" prefWidth="360" style="-fx-background-color: #e5e1fc; -fx-background-radius: 0 3 3 0;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Recent Payments -->
+                    <VBox VBox.vgrow="ALWAYS" spacing="15" style="-fx-padding: 10 0 0 0;">
+                        <Label text="Son İşlemler" styleClass="section-header"/>
+                        <Separator style="-fx-padding: 0 0 10 0;"/>
+                        <VBox fx:id="recentPaymentsVBox" spacing="15" VBox.vgrow="ALWAYS" />
+                    </VBox>
+                </VBox>
+
+                <!-- RIGHT COLUMN -->
+                <VBox spacing="40" HBox.hgrow="ALWAYS">
+                    <!-- Statistics Chart -->
+                    <VBox prefHeight="320" spacing="15">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="Harcama İstatistikleri" styleClass="section-header"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        <AreaChart fx:id="expenseChart" VBox.vgrow="ALWAYS" legendVisible="false" createSymbols="false" animated="true">
+                            <xAxis>
+                                <CategoryAxis fx:id="xAxis" side="BOTTOM" tickLabelFill="#8b95a5" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis side="LEFT" tickLabelFill="#8b95a5" />
+                            </yAxis>
+                        </AreaChart>
+                    </VBox>
+
+                    <!-- Categories Grid -->
+                    <VBox VBox.vgrow="ALWAYS" spacing="20">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="Kategorilere Göre Harcamalar" styleClass="section-header"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="Düzenle" styleClass="edit-link"/>
+                        </HBox>
+                        <FlowPane fx:id="categoryFlowPane" hgap="15" vgap="15" />
+                    </VBox>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- PAGE 2: TRANSACTIONS -->
+        <VBox fx:id="transactionsPage" spacing="25" visible="false" managed="false">
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Tüm İşlemler" styleClass="dashboard-header"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox spacing="10">
+                    <Button text="📥 CSV İndir" onAction="#exportToCsv" styleClass="action-button-secondary"/>
+                    <Button text="📁 Kategoriler" onAction="#manageCategories" styleClass="action-button-secondary"/>
+                    <Button text="+ Yeni Harcama" onAction="#openAddExpense" styleClass="action-button-primary"/>
+                    <Button text="Düzenle" onAction="#openEditExpense" styleClass="action-button-secondary"/>
+                    <Button text="Sil" onAction="#deleteExpense" styleClass="action-button-danger"/>
+                </HBox>
+            </HBox>
+            
+            <VBox VBox.vgrow="ALWAYS" styleClass="table-card">
+                <TableView fx:id="expenseTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
+                    <columns>
+                        <TableColumn fx:id="dateCol" text="Tarih" prefWidth="120"/>
+                        <TableColumn fx:id="categoryCol" text="Kategori" prefWidth="160"/>
+                        <TableColumn fx:id="descriptionCol" text="Açıklama" prefWidth="300"/>
+                        <TableColumn fx:id="amountCol" text="Tutar" prefWidth="100"/>
+                        <TableColumn fx:id="currencyCol" text="Kur" prefWidth="80"/>
+                        <TableColumn fx:id="amountTlCol" text="Tutar (TL)" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </VBox>
+
+    </StackPane>
+</HBox>

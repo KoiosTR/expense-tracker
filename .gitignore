@@ -8,3 +8,4 @@ target/
 
 # Database Configuration
 db.properties
+scratch/

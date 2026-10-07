@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" alignment="CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.expense.controller.SettingsDialogController" styleClass="dialog-vbox">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    
+    <Label text="Hesap Ayarları" styleClass="title-label"/>
+
+    <GridPane hgap="10" vgap="15">
+        <Label text="Adınız:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="firstNameField" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="input-field" prefWidth="200"/>
+
+        <Label text="Soyadınız:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="lastNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="input-field" prefWidth="200"/>
+
+        <Label text="Profil Resmi:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <HBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TextField fx:id="profilePictureField" styleClass="input-field" prefWidth="150" promptText="URL veya Dosya Seçin..."/>
+            <Button text="Seç" onAction="#browseImage" styleClass="action-button-secondary"/>
+        </HBox>
+
+        <Label text="Tema Rengi:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <ComboBox fx:id="colorPaletteComboBox" GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="modern-combo" prefWidth="200"/>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+        <Button text="İptal" onAction="#close" styleClass="secondary-button"/>
+        <Button text="Kaydet" onAction="#save" styleClass="primary-button"/>
+    </HBox>
+</VBox>

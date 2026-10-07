@@ -16,11 +16,19 @@ public class DatabaseManager {
             properties.load(fis);
         } catch (IOException e) {
             System.err.println("Could not load database configuration: " + e.getMessage());
-            e.printStackTrace();
+            properties.setProperty("db.url", "jdbc:postgresql://localhost:5432/expense_tracker");
+            properties.setProperty("db.user", "postgres");
+            properties.setProperty("db.password", "postgres");
         }
     }
 
     public static Connection getConnection() throws SQLException {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            System.err.println("PostgreSQL JDBC Sürücüsü bulunamadı!");
+        }
+        
         return DriverManager.getConnection(
                 properties.getProperty("db.url"),
                 properties.getProperty("db.user"),

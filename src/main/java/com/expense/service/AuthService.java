@@ -44,4 +44,8 @@ public class AuthService {
     public User getCurrentUser() {
         return currentUser;
     }
+    
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+    }
 }
